@@ -1,0 +1,104 @@
+<?php
+$nameErr = $emailErr = $genderErr = $websiteErr = "";
+$name = $email = $gender = $comment = $website = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["username"])) {
+    $nameErr = "Name is required";
+  } else {
+    $name = test_input($_POST["name"]);
+    if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+      $nameErr = "Only letters and white space allowed";
+    }
+  }
+
+  if (empty($_POST["email"])) {
+    $emailErr = "Email is required";
+  } else {
+    $email = test_input($_POST["email"]);
+    // check if e-mail address is well-formed
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $emailErr = "Invalid email format";
+    }
+  }
+
+  if (empty($_POST["website"])) {
+    $website = "";
+  } else {
+    $website = test_input($_POST["website"]);
+    // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
+    if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+      $websiteErr = "Invalid URL";
+    }
+  }
+
+  if (empty($_POST["comment"])) {
+    $comment = "";
+  } else {
+    $comment = test_input($_POST["comment"]);
+  }
+
+  if (empty($_POST["gender"])) {
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animated Login Form</title>
+	<link rel="stylesheet" type="text/css" href="css/stylesignup.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="container">
+		<div class="img">
+			<img src="img/new.svg">
+            <p>Already a user?<br/><a href="index.html" style="text-align:center;color:#b36eb6;">Sign in</a></p>
+		</div>
+		<div class="login-content">
+			<form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
+				<img src="img/avatar.svg">
+				<h2 class="title">Welcome</h2>
+           		<div class="input-div one">
+           		   	<div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   	</div>
+           		   	<div class="div">
+           		   		<input type="text" name="username" class="input" placeholder="Username" required>
+           		   	</div>
+           		</div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <input type="text" name="mail" class="input" placeholder="Email" required>
+                    </div>
+                </div>
+           		<div class="input-div pass">
+           		   	<div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   	</div>
+           		   	<div class="div">
+					<input type="password" name="password" class="input" placeholder="Password" required>
+            	   	</div>
+            	</div>
+                <div class="input-div pass">
+           		   	<div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   	</div>
+           		   	<div class="div">
+					<input type="password" name="confirm-password" class="input" placeholder="Confirm password" required>
+            	   	</div>
+            	</div>
+                <p>By registering your account you agree to<a href="#" style="color:#b36eb6;text-align:center">Terms & Privacy</a></p>
+            	<input type="submit" type="submit" class="btn" value="Register">
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
